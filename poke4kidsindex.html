@@ -1,0 +1,1953 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poke4Kids — Donate Pokémon Cards to NYC Schools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --red: #E3263A;
+            --yellow: #FFD93D;
+            --blue: #1A6FE8;
+            --dark: #1A1A2E;
+            --darker: #0f0f1a;
+            --white: #FFFDF5;
+            --card-bg: #ffffff;
+            --light-bg: #FFF8E7;
+            --green: #2ECC71;
+            --orange: #FF6B35;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--dark);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* ─── NOISE TEXTURE OVERLAY ─── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.4;
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            height: 70px;
+            background: rgba(26, 26, 46, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 2px solid rgba(255, 217, 61, 0.2);
+        }
+
+        .nav-logo {
+            font-family: 'Bangers', cursive;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            color: var(--yellow);
+            text-shadow: 3px 3px 0 var(--red);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--yellow);
+        }
+
+        .nav-cta {
+            background: var(--red);
+            color: var(--white) !important;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            border: 2px solid var(--yellow);
+            transition: transform 0.2s, background 0.2s !important;
+        }
+
+        .nav-cta:hover {
+            background: var(--yellow) !important;
+            color: var(--dark) !important;
+            transform: scale(1.05);
+        }
+
+        /* ─── HERO ─── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 100px 5% 60px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(ellipse at 30% 50%, rgba(30, 111, 232, 0.2) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(227, 38, 58, 0.15) 0%, transparent 50%),
+                var(--darker);
+        }
+
+        .hero-pokeball-bg {
+            position: absolute;
+            right: -5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 55vw;
+            max-width: 750px;
+            opacity: 0.12;
+            animation: spin-slow 40s linear infinite;
+        }
+
+        @keyframes spin-slow {
+            from {
+                transform: translateY(-50%) rotate(0deg);
+            }
+
+            to {
+                transform: translateY(-50%) rotate(360deg);
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 650px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--yellow);
+            color: var(--dark);
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            margin-bottom: 1.5rem;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .hero h1 {
+            font-family: 'Bangers', cursive;
+            font-size: clamp(3.5rem, 8vw, 6.5rem);
+            line-height: 0.95;
+            letter-spacing: 3px;
+            margin-bottom: 1.5rem;
+            animation: fadeUp 0.6s 0.1s ease both;
+        }
+
+        .hero h1 span.highlight {
+            -webkit-text-stroke: 3px var(--yellow);
+            color: transparent;
+            display: block;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            font-weight: 600;
+            line-height: 1.7;
+            color: rgba(255, 253, 245, 0.8);
+            max-width: 500px;
+            margin-bottom: 2.5rem;
+            animation: fadeUp 0.6s 0.2s ease both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            animation: fadeUp 0.6s 0.3s ease both;
+        }
+
+        .btn-primary {
+            background: var(--red);
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            text-decoration: none;
+            border: 3px solid var(--yellow);
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 4px 4px 0 var(--yellow);
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 var(--yellow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            text-decoration: none;
+            border: 3px solid rgba(255, 253, 245, 0.4);
+            transition: border-color 0.2s, color 0.2s;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--yellow);
+            color: var(--yellow);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 3.5rem;
+            animation: fadeUp 0.6s 0.4s ease both;
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-number {
+            font-family: 'Bangers', cursive;
+            font-size: 2.5rem;
+            color: var(--yellow);
+            letter-spacing: 2px;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 253, 245, 0.6);
+            margin-top: 0.2rem;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ─── FLOATING CARDS ─── */
+        .floating-cards {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 42vw;
+            max-width: 500px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            z-index: 2;
+        }
+
+        .poke-card {
+            border-radius: 16px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            border: 3px solid;
+            position: relative;
+            overflow: hidden;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .poke-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .poke-card:nth-child(1) {
+            background: linear-gradient(135deg, #1a6fe8, #0a3d8f);
+            border-color: #5ba8ff;
+            animation-delay: 0s;
+        }
+
+        .poke-card:nth-child(2) {
+            background: linear-gradient(135deg, #e3263a, #8b0000);
+            border-color: #ff6b7a;
+            animation-delay: 0.5s;
+            transform: translateY(20px);
+        }
+
+        .poke-card:nth-child(3) {
+            background: linear-gradient(135deg, #f59e0b, #b45309);
+            border-color: #fcd34d;
+            animation-delay: 1s;
+            transform: translateY(-10px);
+        }
+
+        .poke-card:nth-child(4) {
+            background: linear-gradient(135deg, #059669, #064e3b);
+            border-color: #34d399;
+            animation-delay: 1.5s;
+        }
+
+        .poke-card-emoji {
+            font-size: 2.5rem;
+        }
+
+        .poke-card-name {
+            font-family: 'Bangers', cursive;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        .poke-card-type {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.7;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        /* ─── HOW IT WORKS ─── */
+        .section {
+            padding: 100px 5%;
+        }
+
+        .section-label {
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--yellow);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Bangers', cursive;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            letter-spacing: 2px;
+            line-height: 1.05;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: rgba(255, 253, 245, 0.65);
+            max-width: 500px;
+            line-height: 1.7;
+            margin-bottom: 4rem;
+        }
+
+        .how-it-works {
+            background: var(--darker);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+            position: relative;
+        }
+
+        .step-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid rgba(255, 217, 61, 0.15);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            position: relative;
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .step-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--yellow);
+            box-shadow: 0 20px 60px rgba(255, 217, 61, 0.1);
+        }
+
+        .step-number {
+            font-family: 'Bangers', cursive;
+            font-size: 4rem;
+            color: rgba(255, 217, 61, 0.15);
+            line-height: 1;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .step-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-title {
+            font-family: 'Bangers', cursive;
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+            color: var(--yellow);
+            margin-bottom: 0.75rem;
+        }
+
+        .step-desc {
+            color: rgba(255, 253, 245, 0.7);
+            line-height: 1.7;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        /* ─── IMPACT SECTION ─── */
+        .impact {
+            background: linear-gradient(135deg, var(--blue) 0%, #0a2d6e 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .impact::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 217, 61, 0.15), transparent 70%);
+            top: -200px;
+            right: -100px;
+            border-radius: 50%;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .impact-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .impact-stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s;
+        }
+
+        .impact-stat-card:hover {
+            transform: scale(1.05);
+        }
+
+        .impact-stat-num {
+            font-family: 'Bangers', cursive;
+            font-size: 3rem;
+            color: var(--yellow);
+            letter-spacing: 2px;
+            line-height: 1;
+        }
+
+        .impact-stat-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.5rem;
+            line-height: 1.4;
+        }
+
+        /* ─── DONATE FORM ─── */
+        #donate {
+            background: var(--dark);
+            position: relative;
+        }
+
+        .form-container {
+            max-width: 780px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid rgba(255, 217, 61, 0.2);
+            border-radius: 32px;
+            padding: 3.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--red), var(--yellow), var(--blue));
+        }
+
+        .form-title {
+            font-family: 'Bangers', cursive;
+            font-size: 2.8rem;
+            letter-spacing: 2px;
+            color: var(--yellow);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .form-subtitle {
+            text-align: center;
+            color: rgba(255, 253, 245, 0.65);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 2.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--yellow);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background: rgba(255, 255, 255, 0.06);
+            border: 2px solid rgba(255, 253, 245, 0.15);
+            border-radius: 12px;
+            padding: 0.85rem 1.1rem;
+            color: var(--white);
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: border-color 0.2s, background 0.2s;
+            outline: none;
+            width: 100%;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 253, 245, 0.3);
+        }
+
+        .form-group select option {
+            background: var(--dark);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--yellow);
+            background: rgba(255, 217, 61, 0.06);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 2px solid rgba(255, 253, 245, 0.08);
+            cursor: pointer;
+            transition: border-color 0.2s;
+            grid-column: span 2;
+        }
+
+        .form-checkbox-group:hover {
+            border-color: var(--yellow);
+        }
+
+        .form-checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            accent-color: var(--yellow);
+            cursor: pointer;
+        }
+
+        .form-checkbox-group .check-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: rgba(255, 253, 245, 0.8);
+            line-height: 1.5;
+            text-transform: none;
+            letter-spacing: 0;
+            color: rgba(255, 253, 245, 0.75);
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 1.1rem;
+            background: var(--red);
+            color: var(--white);
+            border: 3px solid var(--yellow);
+            border-radius: 50px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+            box-shadow: 4px 4px 0 var(--yellow);
+            margin-top: 0.5rem;
+        }
+
+        .form-submit:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 var(--yellow);
+            background: #c0142a;
+        }
+
+        .form-submit:active {
+            transform: translate(1px, 1px);
+            box-shadow: 2px 2px 0 var(--yellow);
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .success-message h3 {
+            font-family: 'Bangers', cursive;
+            font-size: 2.5rem;
+            color: var(--green);
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .success-message p {
+            color: rgba(255, 253, 245, 0.75);
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.7;
+        }
+
+        /* ─── SCHOOLS ─── */
+        .schools {
+            background: var(--light-bg);
+            color: var(--dark);
+        }
+
+        .schools .section-label {
+            color: var(--red);
+        }
+
+        .schools .section-title {
+            color: var(--dark);
+        }
+
+        .schools .section-subtitle {
+            color: rgba(26, 26, 46, 0.65);
+        }
+
+        .schools-marquee {
+            overflow: hidden;
+            padding: 1rem 0;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .schools-marquee::before,
+        .schools-marquee::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 80px;
+            z-index: 2;
+        }
+
+        .schools-marquee::before {
+            left: 0;
+            background: linear-gradient(90deg, var(--light-bg), transparent);
+        }
+
+        .schools-marquee::after {
+            right: 0;
+            background: linear-gradient(-90deg, var(--light-bg), transparent);
+        }
+
+        .marquee-track {
+            display: flex;
+            gap: 1.5rem;
+            width: max-content;
+            animation: marquee 25s linear infinite;
+        }
+
+        @keyframes marquee {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        .school-chip {
+            background: white;
+            border: 2px solid rgba(26, 26, 46, 0.1);
+            border-radius: 50px;
+            padding: 0.6rem 1.4rem;
+            font-weight: 800;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+        }
+
+        .school-chip span {
+            font-size: 1rem;
+        }
+
+        .schools-mission {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .mission-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            border: 2px solid rgba(26, 26, 46, 0.06);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .mission-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .mission-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .mission-icon.red {
+            background: rgba(227, 38, 58, 0.12);
+        }
+
+        .mission-icon.blue {
+            background: rgba(26, 111, 232, 0.12);
+        }
+
+        .mission-icon.yellow {
+            background: rgba(255, 217, 61, 0.2);
+        }
+
+        .mission-card h3 {
+            font-family: 'Bangers', cursive;
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+            color: var(--dark);
+            margin-bottom: 0.6rem;
+        }
+
+        .mission-card p {
+            color: rgba(26, 26, 46, 0.65);
+            font-size: 0.9rem;
+            font-weight: 600;
+            line-height: 1.7;
+        }
+
+        /* ─── ABOUT US ─── */
+        .about-us {
+            background: var(--dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-us::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(227, 38, 58, 0.08), transparent 70%);
+            bottom: -100px;
+            right: -100px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: start;
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-mission-statement {
+            font-family: 'Bangers', cursive;
+            font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+            letter-spacing: 1px;
+            line-height: 1.4;
+            color: var(--yellow);
+            border-left: 4px solid var(--red);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0 2rem;
+            background: rgba(255, 217, 61, 0.05);
+            border-radius: 0 12px 12px 0;
+        }
+
+        .about-body {
+            color: rgba(255, 253, 245, 0.72);
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.85;
+            margin-bottom: 1.1rem;
+        }
+
+        .about-body strong {
+            color: var(--white);
+            font-weight: 900;
+        }
+
+        .about-values {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .value-card {
+            display: flex;
+            gap: 1.2rem;
+            align-items: flex-start;
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid rgba(255, 253, 245, 0.07);
+            border-radius: 16px;
+            padding: 1.2rem 1.4rem;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .value-card:hover {
+            border-color: rgba(255, 217, 61, 0.3);
+            transform: translateX(6px);
+        }
+
+        .value-icon {
+            font-size: 1.8rem;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        .value-card h4 {
+            font-family: 'Bangers', cursive;
+            font-size: 1.15rem;
+            letter-spacing: 1px;
+            color: var(--yellow);
+            margin-bottom: 0.3rem;
+        }
+
+        .value-card p {
+            color: rgba(255, 253, 245, 0.6);
+            font-size: 0.88rem;
+            font-weight: 600;
+            line-height: 1.65;
+        }
+
+        .about-founder-card {
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(26, 111, 232, 0.15), rgba(227, 38, 58, 0.1));
+            border: 2px solid rgba(255, 217, 61, 0.2);
+            border-radius: 20px;
+            padding: 1.5rem;
+        }
+
+        .founder-avatar {
+            font-size: 2.8rem;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(255, 217, 61, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 2px solid rgba(255, 217, 61, 0.3);
+        }
+
+        .founder-quote {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: rgba(255, 253, 245, 0.85);
+            font-style: italic;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .founder-name {
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--yellow);
+        }
+
+        @media (max-width: 1024px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+        }
+
+        /* ─── FAQ ─── */
+        .faq {
+            background: var(--darker);
+        }
+
+        .faq-list {
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 2px solid rgba(255, 253, 245, 0.08);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            cursor: pointer;
+            color: var(--white);
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            font-weight: 800;
+            text-align: left;
+            gap: 1rem;
+        }
+
+        .faq-arrow {
+            font-size: 1.2rem;
+            color: var(--yellow);
+            transition: transform 0.3s;
+            flex-shrink: 0;
+        }
+
+        .faq-item.open .faq-arrow {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+            color: rgba(255, 253, 245, 0.65);
+            font-size: 0.95rem;
+            font-weight: 600;
+            line-height: 1.8;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 300px;
+            padding-bottom: 1.5rem;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            background: var(--darker);
+            border-top: 2px solid rgba(255, 217, 61, 0.1);
+            padding: 4rem 5% 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand-name {
+            font-family: 'Bangers', cursive;
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            color: var(--yellow);
+            text-shadow: 3px 3px 0 var(--red);
+            margin-bottom: 1rem;
+        }
+
+        .footer-desc {
+            color: rgba(255, 253, 245, 0.5);
+            font-size: 0.9rem;
+            font-weight: 600;
+            line-height: 1.7;
+            max-width: 300px;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 2px solid rgba(255, 253, 245, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: background 0.2s, border-color 0.2s, transform 0.2s;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 217, 61, 0.15);
+            border-color: var(--yellow);
+            transform: translateY(-3px);
+        }
+
+        .footer-col h4 {
+            font-family: 'Bangers', cursive;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            color: var(--yellow);
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 253, 245, 0.5);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--yellow);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 253, 245, 0.06);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-bottom p {
+            color: rgba(255, 253, 245, 0.35);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .footer-bottom a {
+            color: var(--yellow);
+            text-decoration: none;
+        }
+
+        /* ─── SCROLL REVEAL ─── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* ─── MOBILE HAMBURGER ─── */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 26px;
+            height: 3px;
+            background: var(--white);
+            border-radius: 2px;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: rgba(15, 15, 26, 0.98);
+            backdrop-filter: blur(20px);
+            padding: 2rem 5%;
+            z-index: 999;
+            border-bottom: 2px solid rgba(255, 217, 61, 0.2);
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 1024px) {
+            .floating-cards {
+                display: none;
+            }
+
+            .hero-pokeball-bg {
+                opacity: 0.07;
+            }
+
+            .impact-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero {
+                padding: 90px 5% 50px;
+            }
+
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: span 1;
+            }
+
+            .form-checkbox-group {
+                grid-column: span 1;
+            }
+
+            .form-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .schools-mission {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .hero-stats {
+                flex-wrap: wrap;
+                gap: 1.5rem;
+            }
+
+            .impact-stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+        }
+
+        /* ─── TICKER BANNER ─── */
+        .ticker {
+            background: var(--yellow);
+            color: var(--dark);
+            padding: 0.6rem 0;
+            overflow: hidden;
+            border-top: 3px solid var(--red);
+            border-bottom: 3px solid var(--red);
+        }
+
+        .ticker-track {
+            display: flex;
+            width: max-content;
+            animation: marquee 20s linear infinite;
+            font-family: 'Bangers', cursive;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            gap: 0;
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0 2rem;
+            white-space: nowrap;
+        }
+
+        .ticker-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--red);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ─── NAV ─── -->
+    <nav>
+        <a href="#" class="nav-logo">Poke4Kids</a>
+        <ul class="nav-links">
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#impact">Our Impact</a></li>
+            <li><a href="#schools">Schools</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#donate" class="nav-cta">Donate Now</a></li>
+        </ul>
+        <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#about" onclick="toggleMenu()">About Us</a>
+        <a href="#how-it-works" onclick="toggleMenu()">How It Works</a>
+        <a href="#impact" onclick="toggleMenu()">Our Impact</a>
+        <a href="#schools" onclick="toggleMenu()">Schools</a>
+        <a href="#faq" onclick="toggleMenu()">FAQ</a>
+        <a href="#donate" onclick="toggleMenu()" style="color:var(--yellow);">🎴 Donate Now</a>
+    </div>
+
+    <!-- ─── TICKER ─── -->
+    <div class="ticker" style="margin-top:70px;">
+        <div class="ticker-track" id="tickerTrack">
+            <div class="ticker-item"><span class="ticker-dot"></span> YOUR BULK CARDS BECOME SOMEONE'S FIRST COLLECTION
+            </div>
+            <div class="ticker-item"><span class="ticker-dot"></span> DONATE POKÉMON CARDS TO NYC SCHOOLS</div>
+            <div class="ticker-item"><span class="ticker-dot"></span> SPREADING JOY ONE BOOSTER PACK AT A TIME</div>
+            <div class="ticker-item"><span class="ticker-dot"></span> FREE SHIPPING LABELS PROVIDED</div>
+            <div class="ticker-item"><span class="ticker-dot"></span> 100% OF DONATIONS GO TO PUBLIC SCHOOL KIDS</div>
+            <div class="ticker-item"><span class="ticker-dot"></span> YOUR BULK CARDS BECOME SOMEONE'S FIRST COLLECTION
+            </div>
+            <div class="ticker-item"><span class="ticker-dot"></span> DONATE POKÉMON CARDS TO NYC SCHOOLS</div>
+            <div class="ticker-item"><span class="ticker-dot"></span> SPREADING JOY ONE BOOSTER PACK AT A TIME</div>
+            <div class="ticker-item"><span class="ticker-dot"></span> FREE SHIPPING LABELS PROVIDED</div>
+            <div class="ticker-item"><span class="ticker-dot"></span> 100% OF DONATIONS GO TO PUBLIC SCHOOL KIDS</div>
+        </div>
+    </div>
+
+    <!-- ─── HERO ─── -->
+    <section class="hero">
+        <svg class="hero-pokeball-bg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="95" stroke="white" stroke-width="6" />
+            <path d="M5 100 H195" stroke="white" stroke-width="6" />
+            <circle cx="100" cy="100" r="22" stroke="white" stroke-width="6" fill="none" />
+            <circle cx="100" cy="100" r="12" fill="white" />
+        </svg>
+
+        <div class="hero-content">
+            <div class="hero-badge">🎴 NYC's Pokémon Card Nonprofit</div>
+            <h1>
+                Give Cards.
+                <span class="highlight">Change Lives.</span>
+            </h1>
+            <p>Donate your spare Pokémon cards to Poke4Kids and we'll make sure they land in the hands of NYC public
+                school children who will treasure them forever.</p>
+            <div class="hero-buttons">
+                <a href="#donate" class="btn-primary">Donate My Cards</a>
+                <a href="#how-it-works" class="btn-secondary">See How It Works</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number">1K+</div>
+                    <div class="stat-label">Cards Donated</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Schools Reached</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">900+</div>
+                    <div class="stat-label">Kids Gifted</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="floating-cards">
+            <div class="poke-card">
+                <div class="poke-card-emoji">⚡</div>
+                <div class="poke-card-name">Pikachu</div>
+                <div class="poke-card-type">Electric</div>
+            </div>
+            <div class="poke-card">
+                <div class="poke-card-emoji">🔥</div>
+                <div class="poke-card-name">Charizard</div>
+                <div class="poke-card-type">Fire · Flying</div>
+            </div>
+            <div class="poke-card">
+                <div class="poke-card-emoji">💧</div>
+                <div class="poke-card-name">Blastoise</div>
+                <div class="poke-card-type">Water</div>
+            </div>
+            <div class="poke-card">
+                <div class="poke-card-emoji">🌿</div>
+                <div class="poke-card-name">Bulbasaur</div>
+                <div class="poke-card-type">Grass · Poison</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── ABOUT US ─── -->
+    <section class="section about-us" id="about">
+        <div class="about-grid">
+            <div class="about-text reveal">
+                <div class="section-label">Who We Are</div>
+                <div class="section-title">Our Mission</div>
+                <p class="about-mission-statement">"To help all kids enjoy the Pokémon TCG hobby and not let financial
+                    restraints limit their happiness."</p>
+                <p class="about-body">Pokémon cards have brought joy, friendship, and endless hours of fun to millions
+                    of kids around the world — but for many children in New York City's public schools, the cost of
+                    getting started puts that joy just out of reach.</p>
+                <p class="about-body">Poke4Kids was founded on a simple belief: <strong>every kid deserves a chance to
+                        play.</strong> We bridge the gap between collectors who have more cards than they need and kids
+                    who have never held a single one. Your bulk donations — the commons, the duplicates, the forgotten
+                    binders in your closet — become someone's very first collection.</p>
+                <p class="about-body">We are a community-driven initiative run entirely by volunteers who grew up loving
+                    Pokémon and want to pass that love on to the next generation of trainers across the five boroughs.
+                </p>
+                <a href="#donate" class="btn-primary" style="margin-top:1.5rem; display:inline-block;">Join Our
+                    Mission</a>
+            </div>
+
+            <div class="about-right reveal" style="transition-delay:0.15s">
+                <div class="about-values">
+                    <div class="value-card">
+                        <div class="value-icon">🌍</div>
+                        <div>
+                            <h4>Accessibility</h4>
+                            <p>No child should be excluded from a hobby because of their zip code or family income. We
+                                work to make Pokémon available to every kid, period.</p>
+                        </div>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">🤝</div>
+                        <div>
+                            <h4>Community</h4>
+                            <p>Pokémon has always been about connection. We foster that same spirit — building bonds
+                                between donors, volunteers, teachers, and students citywide.</p>
+                        </div>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">💛</div>
+                        <div>
+                            <h4>Joy First</h4>
+                            <p>We don't sort cards by value — we sort them by the smiles they'll create. Every card we
+                                distribute is chosen to spark excitement in a child's eyes.</p>
+                        </div>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">🔍</div>
+                        <div>
+                            <h4>Transparency</h4>
+                            <p>Every card donated goes directly to students. No overhead, no waste. We publish our
+                                distribution numbers so donors always know their impact.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-founder-card reveal" style="transition-delay:0.3s">
+                    <div class="founder-avatar">🎴</div>
+                    <div class="founder-text">
+                        <p class="founder-quote">"I grew up trading cards at recess — it was how I made my best friends.
+                            Every kid deserves that experience."</p>
+                        <p class="founder-name">— The Poke4Kids Team, NYC</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section how-it-works" id="how-it-works">
+        <div style="text-align:center; margin-bottom:4rem;" class="reveal">
+            <div class="section-label">Simple Process</div>
+            <div class="section-title">How It Works</div>
+            <p class="section-subtitle" style="margin: 0 auto 0;">Four easy steps to turn your extra cards into joy for
+                a child.</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card reveal">
+                <div class="step-number">01</div>
+                <div class="step-icon">📝</div>
+                <div class="step-title">Fill Out The Form</div>
+                <p class="step-desc">Complete our quick donation form below with your name, address, and approximate
+                    card count. Takes under 2 minutes.</p>
+            </div>
+            <div class="step-card reveal" style="transition-delay:0.1s">
+                <div class="step-number">02</div>
+                <div class="step-icon">📦</div>
+                <div class="step-title">Box Up Your Cards</div>
+                <p class="step-desc">Gather all your bulk cards — commons, uncommons, holos, we take them all. Any
+                    condition accepted.</p>
+            </div>
+            <div class="step-card reveal" style="transition-delay:0.2s">
+                <div class="step-number">03</div>
+                <div class="step-icon">🚚</div>
+                <div class="step-title">We Cover Shipping</div>
+                <p class="step-desc">We'll email you a prepaid shipping label within 48 hours. Just drop your box at any
+                    USPS location.</p>
+            </div>
+            <div class="step-card reveal" style="transition-delay:0.3s">
+                <div class="step-number">04</div>
+                <div class="step-icon">🏫</div>
+                <div class="step-title">Cards Reach Schools</div>
+                <p class="step-desc">We sort, bundle, and deliver to NYC public school classrooms and after-school
+                    programs citywide.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── IMPACT ─── -->
+    <section class="section impact" id="impact">
+        <div class="impact-grid">
+            <div class="reveal">
+                <div class="section-label" style="color:var(--yellow)">Real Impact</div>
+                <div class="section-title">Turning Bulk Cards<br>Into Big Smiles</div>
+                <p
+                    style="color:rgba(255,255,255,0.75); font-size:1.05rem; font-weight:600; line-height:1.8; margin-bottom:2rem;">
+                    Many NYC public school kids have never owned a Pokémon card. Your extra bulk cards — the ones
+                    gathering dust — spark friendships, encourage trading, reading, and strategic thinking in classrooms
+                    across the five boroughs.</p>
+                <a href="#donate" class="btn-primary">Start Donating Today</a>
+            </div>
+            <div class="impact-stats-grid reveal" style="transition-delay:0.2s">
+                <div class="impact-stat-card">
+                    <div class="impact-stat-num">5</div>
+                    <div class="impact-stat-label">NYC Boroughs Served</div>
+                </div>
+                <div class="impact-stat-card">
+                    <div class="impact-stat-num">4</div>
+                    <div class="impact-stat-label">Partner Schools</div>
+                </div>
+                <div class="impact-stat-card">
+                    <div class="impact-stat-num">1000</div>
+                    <div class="impact-stat-label">Cards Donated</div>
+                </div>
+                <div class="impact-stat-card">
+                    <div class="impact-stat-num">100%</div>
+                    <div class="impact-stat-label">Go To Schools</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── SCHOOLS ─── -->
+    <section class="section schools" id="schools">
+        <div class="reveal" style="text-align:center; margin-bottom:3rem;">
+            <div class="section-label">Proud Partners</div>
+            <div class="section-title" style="color:var(--dark)">Schools We Serve</div>
+            <p class="section-subtitle" style="margin:0 auto;">We partner with public elementary and middle schools
+                across all five boroughs of New York City.</p>
+        </div>
+
+        <div class="schools-marquee reveal">
+            <div class="marquee-track" id="schoolMarquee">
+                <div class="school-chip"><span>🏫</span> PS 130 Manhattan</div>
+                <div class="school-chip"><span>🏫</span> PS 22 Staten Island</div>
+                <div class="school-chip"><span>🏫</span> PS 58 Brooklyn</div>
+                <div class="school-chip"><span>🏫</span> PS 150 Queens</div>
+                <div class="school-chip"><span>🏫</span> MS 44 Bronx</div>
+                <div class="school-chip"><span>🏫</span> PS 11 Manhattan</div>
+                <div class="school-chip"><span>🏫</span> PS 69 Brooklyn</div>
+                <div class="school-chip"><span>🏫</span> PS 184 Queens</div>
+                <div class="school-chip"><span>🏫</span> PS 75 Bronx</div>
+                <div class="school-chip"><span>🏫</span> IS 143 Manhattan</div>
+                <div class="school-chip"><span>🏫</span> PS 30 Staten Island</div>
+                <div class="school-chip"><span>🏫</span> PS 130 Manhattan</div>
+                <div class="school-chip"><span>🏫</span> PS 22 Staten Island</div>
+                <div class="school-chip"><span>🏫</span> PS 58 Brooklyn</div>
+                <div class="school-chip"><span>🏫</span> PS 150 Queens</div>
+                <div class="school-chip"><span>🏫</span> MS 44 Bronx</div>
+                <div class="school-chip"><span>🏫</span> PS 11 Manhattan</div>
+                <div class="school-chip"><span>🏫</span> PS 69 Brooklyn</div>
+                <div class="school-chip"><span>🏫</span> PS 184 Queens</div>
+                <div class="school-chip"><span>🏫</span> PS 75 Bronx</div>
+                <div class="school-chip"><span>🏫</span> IS 143 Manhattan</div>
+                <div class="school-chip"><span>🏫</span> PS 30 Staten Island</div>
+            </div>
+        </div>
+
+        <div class="schools-mission">
+            <div class="mission-card reveal">
+                <div class="mission-icon red">❤️</div>
+                <h3>Building Community</h3>
+                <p>Pokémon cards encourage social interaction, trading, and friendship among kids who may not otherwise
+                    connect with each other.</p>
+            </div>
+            <div class="mission-card reveal" style="transition-delay:0.1s">
+                <div class="mission-icon blue">📚</div>
+                <h3>Creating Opportunity</h3>
+                <p>Many kids enjoy collecting Pokémon cards, but are limited due to their parents' financial situations.
+                    Donating helps break down this barrier and creates opportunities for all kids to enjoy Pokémon TCG.
+                </p>
+            </div>
+            <div class="mission-card reveal" style="transition-delay:0.2s">
+                <div class="mission-icon yellow">🧠</div>
+                <h3>Strategic Thinking</h3>
+                <p>The Pokémon TCG develops math skills, probabilistic reasoning, and critical thinking — all while
+                    having an incredible amount of fun.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── DONATE FORM ─── -->
+    <section class="section" id="donate">
+        <div class="form-container reveal">
+            <div id="formSection">
+                <div class="form-title">🎴 Donate Your Cards</div>
+                <p class="form-subtitle">Fill out the form below and we'll send you a prepaid shipping label within 48
+                    hours.</p>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" placeholder="Ash" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" placeholder="Ketchum" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="you@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number (Optional)</label>
+                        <input type="tel" id="phone" placeholder="(212) 555-0100">
+                    </div>
+
+                    <div class="form-group full">
+                        <label for="address">Street Address</label>
+                        <input type="text" id="address" placeholder="123 Pallet Town Ave" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" placeholder="New York" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <select id="state" required>
+                            <option value="" disabled selected>Select state...</option>
+                            <option value="NY">New York</option>
+                            <option value="NJ">New Jersey</option>
+                            <option value="CT">Connecticut</option>
+                            <option value="PA">Pennsylvania</option>
+                            <option value="MA">Massachusetts</option>
+                            <option value="CA">California</option>
+                            <option value="TX">Texas</option>
+                            <option value="FL">Florida</option>
+                            <option value="IL">Illinois</option>
+                            <option value="WA">Washington</option>
+                            <option value="other">Other State</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="zip">ZIP Code</label>
+                        <input type="text" id="zip" placeholder="10001" maxlength="10" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cardCount">Approximate Card Count</label>
+                        <select id="cardCount" required>
+                            <option value="" disabled selected>How many cards?</option>
+                            <option value="under50">Under 50 cards</option>
+                            <option value="50-200">50 – 200 cards</option>
+                            <option value="200-500">200 – 500 cards</option>
+                            <option value="500-1000">500 – 1,000 cards</option>
+                            <option value="1000+">1,000+ cards</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cardType">Card Types (roughly)</label>
+                        <select id="cardType">
+                            <option value="" disabled selected>What types?</option>
+                            <option value="all-bulk">Mostly bulk commons/uncommons</option>
+                            <option value="mixed">Mixed (commons + some rares)</option>
+                            <option value="includes-holos">Includes holos / rares</option>
+                            <option value="not-sure">Not sure / mixed everything</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full">
+                        <label for="notes">Additional Notes (Optional)</label>
+                        <textarea id="notes"
+                            placeholder="Any details about your donation, special instructions, or questions for us..."></textarea>
+                    </div>
+
+                    <div class="form-checkbox-group">
+                        <input type="checkbox" id="taxReceipt">
+                        <label for="taxReceipt" class="check-label">
+                            <strong style="color:var(--yellow); display:block; margin-bottom:0.2rem;">Request a Tax
+                                Receipt</strong>
+                            I would like to receive a donation acknowledgment letter for tax purposes. (We'll send it to
+                            your email address above.)
+                        </label>
+                    </div>
+
+                    <div class="form-checkbox-group">
+                        <input type="checkbox" id="updates">
+                        <label for="updates" class="check-label">
+                            <strong style="color:var(--yellow); display:block; margin-bottom:0.2rem;">Keep Me
+                                Updated</strong>
+                            Send me updates about Poke4Kids — new schools, impact stories, and upcoming events. No spam,
+                            ever.
+                        </label>
+                    </div>
+
+                </div>
+
+                <button class="form-submit" onclick="submitForm()">🚀 Submit My Donation</button>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                <div class="success-icon">🎉</div>
+                <h3>You're a Pokémon Hero!</h3>
+                <p>
+                    Thank you so much for your generous donation!<br><br>
+                    We'll review your submission and send a <strong style="color:var(--yellow);">prepaid shipping
+                        label</strong> to your email within <strong style="color:var(--yellow);">48
+                        hours</strong>.<br><br>
+                    Your cards will soon be in the hands of a kid in an NYC public school who will absolutely love them.
+                    🎴✨
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── FAQ ─── -->
+    <section class="section faq" id="faq">
+        <div style="text-align:center; margin-bottom:4rem;" class="reveal">
+            <div class="section-label">Got Questions?</div>
+            <div class="section-title">Frequently Asked</div>
+        </div>
+        <div class="faq-list reveal">
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Do you accept cards in any condition?
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-answer">Absolutely! We accept cards in all conditions — played, heavily played, even
+                    bent or slightly damaged cards. The goal is to get kids introduced to the world of Pokémon, and any
+                    card helps with that. The only thing we ask is that cards are dry and free of mold.</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Do I really get a free shipping label?
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-answer">Yes! Once you submit the donation form, we'll email you a prepaid USPS shipping
+                    label within 48 hours. There is absolutely no cost to you. Just box up your cards, attach the label,
+                    and drop it at any USPS location or schedule a free pickup.</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    What sets or years do you accept?
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-answer">We accept Pokémon cards from any set and any year — from Base Set all the way to
+                    the newest Scarlet & Violet releases. Older cards are often extra special to the kids and teachers
+                    who receive them!</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    How do cards get distributed to schools?
+                    <span class="faq-arrow">▼</span>
+                </button>
+                <div class="faq-answer">Once we receive your cards, our volunteers sort and organize them into bundles.
+                    We then coordinate directly with NYC Department of Education partner schools, after-school programs,
+                    and school librarians to distribute the cards directly to students during school events, library
+                    programs, and classroom activities.</div>
+            </div>
+
+
+        </div>
+    </section>
+
+    <!-- ─── FOOTER ─── -->
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand-name">Poke4Kids</div>
+                <p class="footer-desc">Connecting Pokémon card donors with NYC public school children — one bulk
+                    donation at a time. Based in New York City.</p>
+                <div class="footer-social">
+                    <a href="#" class="social-btn">𝕏</a>
+                    <a href="#" class="social-btn">📷</a>
+                    <a href="#" class="social-btn">👥</a>
+                    <a href="#" class="social-btn">📧</a>
+                </div>
+            </div>
+            <div>
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#impact">Our Impact</a></li>
+                    <li><a href="#schools">Schools We Serve</a></li>
+                    <li><a href="#donate">Donate Cards</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Contact</h4>
+                <ul class="footer-links">
+                    <li><a href="mailto:hello@poke4kids.org">hello@poke4kids.org</a></li>
+                    <li><a href="#">Volunteer With Us</a></li>
+                    <li><a href="#">Partner Schools</a></li>
+                    <li><a href="#">Press Inquiries</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Poke4Kids. Made with ❤️ for NYC kids. Pokémon is a trademark of Nintendo / Creatures Inc. / GAME
+                FREAK inc.</p>
+            <p>Built in New York City 🗽</p>
+        </div>
+    </footer>
+
+    <script>
+        // ─── MOBILE MENU ───
+        function toggleMenu() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+        }
+
+        // ─── FAQ TOGGLE ───
+        function toggleFaq(btn) {
+            const item = btn.parentElement;
+            const isOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+            if (!isOpen) item.classList.add('open');
+        }
+
+        // ─── FORM SUBMIT ───
+        function submitForm() {
+            const required = ['firstName', 'lastName', 'email', 'address', 'city', 'state', 'zip', 'cardCount'];
+            let valid = true;
+
+            required.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el.value.trim()) {
+                    el.style.borderColor = 'var(--red)';
+                    el.style.background = 'rgba(227,38,58,0.08)';
+                    valid = false;
+                    setTimeout(() => {
+                        el.style.borderColor = '';
+                        el.style.background = '';
+                    }, 2500);
+                }
+            });
+
+            // Basic email check
+            const email = document.getElementById('email').value;
+            if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                document.getElementById('email').style.borderColor = 'var(--red)';
+                valid = false;
+                setTimeout(() => document.getElementById('email').style.borderColor = '', 2500);
+            }
+
+            if (!valid) {
+                const btn = document.querySelector('.form-submit');
+                btn.textContent = '⚠️ Please fill in all required fields';
+                setTimeout(() => btn.textContent = '🚀 Submit My Donation', 2000);
+                return;
+            }
+
+            // Show success
+            document.getElementById('formSection').style.display = 'none';
+            const success = document.getElementById('successMessage');
+            success.classList.add('show');
+            success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // ─── SCROLL REVEAL ───
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // ─── SMOOTH NAV HIGHLIGHT ───
+        const sections = document.querySelectorAll('section[id]');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(sec => {
+                if (window.scrollY >= sec.offsetTop - 200) current = sec.id;
+            });
+            document.querySelectorAll('.nav-links a').forEach(a => {
+                a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--yellow)' : '';
+            });
+        });
+    </script>
+</body>
+
+</html>
